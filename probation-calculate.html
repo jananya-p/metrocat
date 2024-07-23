@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณวันสิ้นสุดทดลองงาน</title>
+</head>
+<body>
+    <h1>คำนวณวันสิ้นสุดทดลองงาน</h1>
+    <p>กรุณาระบุวันที่เริ่มต้นการทดลองงาน:</p>
+    <input type="date" id="startDate" name="startDate">
+    <button onclick="calculateEndDate()">คำนวณ</button>
+    <p>วันที่สิ้นสุดทดลองงาน: <span id="endDate"></span></p>
+    <script>
+        function calculateEndDate() {
+            var startDate = new Date(document.getElementById("startDate").value);
+            var endDate = new Date(startDate.getTime() + 119 * 24 * 60 * 60 * 1000);
+            document.getElementById("endDate").innerHTML = endDate.toLocaleDateString();
+        }
+    </script>
+</body>
+</html>
