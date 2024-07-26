@@ -9,13 +9,26 @@
     <h1>คำนวณวันสิ้นสุดทดลองงาน</h1>
     <p>กรุณาระบุวันที่เริ่มต้นการทดลองงาน:</p>
     <input type="date" id="startDate" name="startDate">
-    <button onclick="calculateEndDate()">คำนวณ</button>
-    <p>วันที่สิ้นสุดทดลองงาน: <span id="endDate"></span></p>
+    <button onclick="calculateEndDates()">คำนวณ</button>
+    <p>วันที่สิ้นสุดทดลองงาน (120 วัน): <span id="endDate120"></span></p>
+    <p>วันที่ทดลองงาน (60 วัน): <span id="endDate60"></span></p>
+    <p>วันสุดท้ายในการประเมินผ่าน HumanSoft (80 วัน): <span id="endDate80"></span></p>
     <script>
-        function calculateEndDate() {
+        function calculateEndDates() {
             var startDate = new Date(document.getElementById("startDate").value);
-            var endDate = new Date(startDate.getTime() + 119 * 24 * 60 * 60 * 1000);
-            document.getElementById("endDate").innerHTML = endDate.toLocaleDateString();
+            var endDate120 = new Date(startDate.getTime() + 119 * 24 * 60 * 60 * 1000);
+            var endDate60 = new Date(startDate.getTime() + 59 * 24 * 60 * 60 * 1000);
+            var endDate80 = new Date(startDate.getTime() + 79 * 24 * 60 * 60 * 1000);
+            document.getElementById("endDate120").innerHTML = formatDate(endDate120);
+            document.getElementById("endDate60").innerHTML = formatDate(endDate60);
+            document.getElementById("endDate80").innerHTML = formatDate(endDate80);
+        }
+
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
+            return day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
         }
     </script>
 </body>
