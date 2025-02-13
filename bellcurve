@@ -1,0 +1,66 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import math
+    
+    df = pd.read_csv(file_path, encoding='utf-8-sig')
+    
+    df["คะแนนเฉลี่ย"] = pd.to_numeric(df["คะแนนเฉลี่ย"], errors="coerce")
+    df = df.dropna(subset=["คะแนนเฉลี่ย"])
+    
+    departments = df["ฝ่าย"].unique()
+    n_departments = len(departments)
+    ์
+    n_cols = min(2, n_departments)
+    n_rows = math.ceil(n_departments / n_cols)
+    
+## Subplot
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, 5*n_rows))
+    if n_departments == 1:
+        axes = np.array([axes])
+    axes = axes.flatten()
+    
+    colors = ['#FF9999', '#66B2FF', '#99FF99', '#FFCC99', '#FF99CC', '#99CCFF']
+    
+    for idx, dept in enumerate(departments):
+        dept_data = df[df["ฝ่าย"] == dept]["คะแนนเฉลี่ย"]
+        color = colors[idx % len(colors)]
+        
+        ## Bell Curve
+        sns.kdeplot(data=dept_data, ax=axes[idx], fill=True, color=color)
+        
+        ## คำนวณค่าสถิติ
+        mean = dept_data.mean()
+        std = dept_data.std()
+        count = len(dept_data)
+        
+        axes[idx].set_title(f'Department: {dept}', pad=20, fontsize=14)
+        axes[idx].set_xlabel('Average Score', fontsize=12)
+        axes[idx].set_ylabel('Density', fontsize=12)
+        
+        ## เพิ่มข้อมูลสถิติ
+        stats_text = (f'N = {count}\n'
+                     f'Mean = {mean:.2f}\n'
+                     f'SD = {std:.2f}')
+        
+        axes[idx].text(0.95, 0.95, stats_text,
+                      transform=axes[idx].transAxes,
+                      verticalalignment='top',
+                      horizontalalignment='right',
+                      bbox=dict(boxstyle='round', facecolor='white', alpha=0.8),
+                      fontsize=11)
+        
+        axes[idx].grid(True, alpha=0.3)
+  
+    for idx in range(n_departments, len(axes)):
+        axes[idx].set_visible(False)
+    
+    fig.suptitle('Distribution of Average Scores by Division', fontsize=16, y=1.02)
+    
+    plt.tight_layout()
+    return plt
+
+file_path = ".csv"
+plot = create_department_bellcurves(file_path)
+plot.show()
